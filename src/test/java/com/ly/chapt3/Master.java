@@ -44,20 +44,20 @@ public class Master {
 				}
 				zk.create("/master", serverId.getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
 				isLeader = true;
-				break;
 			}catch(NodeExistsException e){
 				isLeader = false;
 				break;
 			}catch(ConnectionLossException e){
 				System.out.println("connection lose...");
-			}finally{
+			}
+//			}finally{
 			if(checkMaster()){
 				System.out.println(String.format("%s is master", serverId));
 				break;
 			}else{
 				System.out.println(String.format("%s is not master", serverId));
 			}
-			}
+//			}
 		}
 	}
 	
