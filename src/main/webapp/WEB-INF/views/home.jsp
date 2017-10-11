@@ -16,7 +16,6 @@
 	function initDataGrid(){
 		$('#zkweb_zkcfg').datagrid({
 			onClickRow:function(rowIndex, rowData){
-				alert(rowData.ID);
 				initTree(rowData.ID);
 			},
 			url:'zkcfg/queryZkCfg'
@@ -52,14 +51,14 @@
     					tab: tab,
     					options: {
     						title: node.text,
-    						href: "zk/queryZnodeInfo?path="+encodeURI(encodeURI(node.attributes.path))+"&cacheId="+cacheId  
+    						href: "zk/queryZnodeInfo?path="+encodeURI(escape(node.attributes.path))+"&cacheId="+cacheId  
     					}
     				});
     			}else {
     				$('#zkTab').tabs('add',{
     					id:0,
     		            title:node.text,  
-    		            href: "zk/queryZnodeInfo?path="+encodeURI(encodeURI(node.attributes.path))+"&cacheId="+cacheId
+    		            href: "zk/queryZnodeInfo?path="+encodeURI(escape(node.attributes.path))+"&cacheId="+cacheId
     		            //closable:true  
     	        	}); 
     			}
@@ -67,7 +66,7 @@
     		},
     		onBeforeExpand:function(node,param){
     			if(node.attributes != null){
-    				$('#zkTree').tree('options').url = "zk/queryZnode?path="+encodeURI(encodeURI(node.attributes.path))+"&cacheId="+cacheId; 
+    				$('#zkTree').tree('options').url = "zk/queryZnode?path="+encodeURI(escape(node.attributes.path))+"&cacheId="+cacheId; 
     			}
     		}
     	});
