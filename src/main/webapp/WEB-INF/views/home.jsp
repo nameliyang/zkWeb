@@ -16,7 +16,7 @@
 	function initDataGrid(){
 		$('#zkweb_zkcfg').datagrid({
 			onClickRow:function(rowIndex, rowData){
-				//alert(rowData.DES);
+				alert(rowData.ID);
 				initTree(rowData.ID);
 			},
 			url:'zkcfg/queryZkCfg'
