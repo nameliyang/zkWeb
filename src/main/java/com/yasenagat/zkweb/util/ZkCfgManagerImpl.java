@@ -1,6 +1,7 @@
 package com.yasenagat.zkweb.util;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -21,23 +22,40 @@ public class ZkCfgManagerImpl implements ZkCfgManager {
 	private static Logger log = LoggerFactory.getLogger(ZkCfgManagerImpl.class);
 //	jdbc:h2:tcp://localhost/~/test
 		
-	private static JdbcConnectionPool cp = JdbcConnectionPool.create("jdbc:h2:~/zkcfg","sa","sa");
+//	private static JdbcConnectionPool cp = JdbcConnectionPool.create("jdbc:h2:~/zkcfg","sa","sa");
 //	private static JdbcConnectionPool cp = JdbcConnectionPool.create("jdbc:mysql://127.0.0.1/conseb?characterEncoding=utf-8","root","liyang");
 //	private static JdbcConnectionPool cp = JdbcConnectionPool.create("jdbc:h2:tcp://127.0.0.1/~/zkcfg","sa","sa"); 
 	private static Connection conn = null;
 	static QueryRunner run = new QueryRunner(H2Util.getDataSource());
 	
 	public ZkCfgManagerImpl() {
-		cp.setMaxConnections(20);
-		cp.setLoginTimeout(1000 * 50);
+//		cp.setMaxConnections(20);
+//		cp.setLoginTimeout(1000 * 50);
 	};
-	private Connection getConnection() throws SQLException{
-		if(null == conn){
-			conn = cp.getConnection();
-		}
-		return conn;
+//	private Connection getConnection() throws SQLException{
+//		if(null == conn){
+//			conn = cp.getConnection();
+//		}
+//		return conn;
+//	}
+	private static Connection getConnection() {
+	    String driver = "com.mysql.jdbc.Driver";
+	    String url = "jdbc:mysql://127.0.0.1:3306/conseb";
+	    String username = "root";
+	    String password = "liyang";
+	    Connection conn = null;
+	    try {
+	        Class.forName(driver); //classLoader,加载对应驱动
+	        if(conn == null){
+	        	conn = (Connection) DriverManager.getConnection(url, username, password);
+	        }
+	    } catch (ClassNotFoundException e) {
+	        e.printStackTrace();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return conn;
 	}
-	
 	private void closeConn(){
 		if(null != conn){
 			try {
