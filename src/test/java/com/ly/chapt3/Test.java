@@ -11,8 +11,7 @@ import org.apache.zookeeper.Watcher.Event.KeeperState;
 import org.apache.zookeeper.ZooKeeper;
 
 public class Test {
-	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		
 //		ZooKeeper zoo = new ZooKeeper("127.0.0.1:2181", 10000, new Watcher(){
 //			@Override
@@ -24,8 +23,24 @@ public class Test {
 //		});
 //      System.out.println(zoo);
 		
-		ByteBuffer byteBuf = ByteBuffer.allocate(10);
-		byteBuf.put("hello".getBytes());
-		System.out.println(byteBuf);
+		
+		TcpClient client = new TcpClient() {
+			@Override
+			protected void onRead(ByteBuffer buf) throws Exception {
+				System.out.println(buf);
+			}
+			
+			@Override
+			protected void onDisconnected() {
+			}
+			
+			@Override
+			protected void onConnected() throws Exception {
+				
+			}
+		};
+		client.setAddress(new InetSocketAddress("127.0.0.1", 20001));
+		client.start();
+		client.send(ByteBuffer.wrap("helloworld".getBytes()));
 	}
 }

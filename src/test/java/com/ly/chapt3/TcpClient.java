@@ -97,7 +97,8 @@ public abstract class TcpClient implements Runnable {
 	public void send(ByteBuffer buffer) throws InterruptedException,
 			IOException {
 		if (!connected.get())
-			throw new IOException("not connected");
+			 return;
+		
 		synchronized (writeBuf) {
 			// try direct write of what's in the buffer to free up space
 			if (writeBuf.remaining() < buffer.remaining()) {

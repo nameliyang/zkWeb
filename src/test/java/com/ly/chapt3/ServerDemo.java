@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Random;
 
 public class ServerDemo {
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -20,7 +21,7 @@ public class ServerDemo {
 						while((b = (byte) inputStream.read())!=-1){
 							outputStream.write(b);
 							outputStream.flush();
-							Thread.sleep(2000);
+							Thread.sleep(new Random().nextInt(1000));
 						}
 						inputStream.close();
 						outputStream.close();
