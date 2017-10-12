@@ -25,6 +25,9 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
+
+
+
 /**
  * A simple NIO TCP client Assumptions: - the client should always be connected,
  * once it gets disconnected it reconnects - the exception thrown by onRead
@@ -236,7 +239,7 @@ public abstract class TcpClient implements Runnable {
 		SocketChannel ch = (SocketChannel) key.channel();
 		if (ch.finishConnect()) {
 			LOG.info("connected to " + address);
-			key.interestOps(key.interestOps() ^ SelectionKey.OP_CONNECT);
+			key.interestOps(key.interestOps() & ~SelectionKey.OP_CONNECT);
 			key.interestOps(key.interestOps() | SelectionKey.OP_READ);
 			reconnectInterval = INITIAL_RECONNECT_INTERVAL;
 			connected.set(true);
@@ -325,6 +328,7 @@ public abstract class TcpClient implements Runnable {
 
 			@Override
 			protected void onConnected() throws Exception {
+				System.out.println("on connected.........");
 			}
 		};
 
