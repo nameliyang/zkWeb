@@ -10,17 +10,27 @@ public class ServerDemo {
 	public static void main(String[] args) throws IOException, InterruptedException {
 		ServerSocket serverSocket = new ServerSocket(20001);
 		while(true){
-			Socket socket = serverSocket.accept();
-			InputStream inputStream = socket.getInputStream();
-			OutputStream outputStream = socket.getOutputStream();
-			byte b ;
-			while((b = (byte) inputStream.read())!=-1){
-				Thread.sleep(2000);
-				outputStream.write(b);
-			}
-			inputStream.close();
-			outputStream.close();
+			final Socket socket = serverSocket.accept();
+			new Thread(){
+				public void run() {
+					try {
+						InputStream inputStream = socket.getInputStream();
+						OutputStream outputStream = socket.getOutputStream();
+						byte b ;
+						while((b = (byte) inputStream.read())!=-1){
+							outputStream.write(b);
+							outputStream.flush();
+							Thread.sleep(2000);
+						}
+						inputStream.close();
+						outputStream.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				};
+			}.start();
 		}
-		
 	}
 }

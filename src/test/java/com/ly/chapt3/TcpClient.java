@@ -40,8 +40,8 @@ public abstract class TcpClient implements Runnable {
 	protected static final Logger LOG = Logger.getLogger(TcpClient.class);
 	private static final long INITIAL_RECONNECT_INTERVAL = 500; // 500 ms.
 	private static final long MAXIMUM_RECONNECT_INTERVAL = 30000; // 30 sec.
-	private static final int READ_BUFFER_SIZE = 0x100000;
-	private static final int WRITE_BUFFER_SIZE = 0x100000;
+	private static final int READ_BUFFER_SIZE = 1024*1024;
+	private static final int WRITE_BUFFER_SIZE = 5;
 
 	private long reconnectInterval = INITIAL_RECONNECT_INTERVAL;
 
@@ -339,27 +339,29 @@ public abstract class TcpClient implements Runnable {
 			e.printStackTrace();
 		}
 
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				LOG.info("out bytes: " + client.bytesOut.get());
-				LOG.info("in bytes:  " + client.bytesIn.get());
-			}
-		}, 5000, 5000);
+//		Timer timer = new Timer();
+//		timer.schedule(new TimerTask() {
+//			@Override
+//			public void run() {
+//				LOG.info("out bytes: " + client.bytesOut.get());
+//				LOG.info("in bytes:  " + client.bytesIn.get());
+//			}
+//		}, 5000, 5000);
 
 		while (!client.isConnected())
 			Thread.sleep(500);
 
 		LOG.info("starting server flood");
-		ByteBuffer buf = ByteBuffer.allocate(65535);
-		Random rnd = new Random();
+		ByteBuffer buf = ByteBuffer.allocate(Byte.MAX_VALUE);
 		while (true) {
-			short len = (short) rnd.nextInt(Short.MAX_VALUE - 2);
-			byte[] bytes = new byte[len];
-			rnd.nextBytes(bytes);
-			buf.putShort((short) len);
-			buf.put(bytes);
+//			short len = (short) rnd.nextInt(Short.MAX_VALUE - 2);
+//			byte[] bytes = new byte[len];
+//			rnd.nextBytes(bytes);
+//			buf.putShort((short) len);
+//			buf.put(bytes);
+			for(int i = 1;i<= Byte.MAX_VALUE;i++){
+				buf.put((byte)i);
+			}
 			buf.flip();
 			try {
 				client.send(buf);
