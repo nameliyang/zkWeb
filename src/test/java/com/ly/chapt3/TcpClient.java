@@ -97,7 +97,7 @@ public abstract class TcpClient implements Runnable {
 	public void send(ByteBuffer buffer) throws InterruptedException,
 			IOException {
 		if (!connected.get())
-			 return;
+			throw new IOException("not connected");
 		
 		synchronized (writeBuf) {
 			// try direct write of what's in the buffer to free up space
@@ -366,6 +366,7 @@ public abstract class TcpClient implements Runnable {
 			buf.flip();
 			try {
 				client.send(buf);
+			
 			} catch (Exception e) {
 				LOG.error("exception: " + e.getMessage());
 				while (!client.isConnected())
